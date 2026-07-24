@@ -24,11 +24,14 @@ if (-not (Test-Path $XamlFile)) {
     exit 1
 }
 
-[xml]$XamlDoc = Get-Content -Path $XamlFile -Raw
+$RawXaml = Get-Content -Path $XamlFile -Raw
+# Strip x:Class and ignorable attributes that cause XamlReader::Load exceptions in PowerShell
+$CleanXaml = $RawXaml -replace 'x:Class="[^"]*"', '' -replace 'mc:Ignorable="[^"]*"', '' -replace 'xmlns:mc="[^"]*"', '' -replace 'd:DesignHeight="[^"]*"', '' -replace 'd:DesignWidth="[^"]*"', ''
+[xml]$XamlDoc = $CleanXaml
 
 # Parse WPF XAML Reader
 $Reader = (New-Object System.Xml.XmlNodeReader $XamlDoc)
-$Window = [Windows.Markup.XamlReader]::Load($Reader)
+$Window = [System.Windows.Markup.XamlReader]::Load($Reader)
 
 # Map UI Controls by Name
 $BtnInstallAll = $Window.FindName("BtnInstallAll")

@@ -14,6 +14,9 @@ param(
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
+# Bypass ExecutionPolicy for current process
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force -ErrorAction SilentlyContinue
+
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "  ICT PDSI Utility v1.0.0 - Launcher" -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
@@ -60,6 +63,9 @@ if (-not (Test-Path -Path $ManifestPath)) {
         exit 1
     }
 }
+
+# Unblock all extracted script files (removes Windows Mark-of-the-Web block)
+Get-ChildItem -Path $RootPath -Recurse -ErrorAction SilentlyContinue | Unblock-File -ErrorAction SilentlyContinue
 
 # 1. Load Local Manifest Configuration
 if (-not (Test-Path -Path $ManifestPath)) {
