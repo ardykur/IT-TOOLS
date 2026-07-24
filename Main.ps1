@@ -3,16 +3,27 @@
 # ==============================================================================
 
 param(
-    [object]$Manifest
+    [object]$Manifest,
+    [string]$RootPath
 )
 
+if ([string]::IsNullOrWhiteSpace($RootPath)) {
+    $RootPath = if ($PSScriptRoot) { $PSScriptRoot } else { "$env:TEMP\ICT_PDSI_Utility" }
+}
+
 # Load Modules
-Get-ChildItem -Path "$PSScriptRoot\Modules\*.psm1" | ForEach-Object {
+$ModulesDir = Join-Path $RootPath "Modules"
+Get-ChildItem -Path "$ModulesDir\*.psm1" -ErrorAction SilentlyContinue | ForEach-Object {
     Import-Module $_.FullName -Force
 }
 
 # Load XAML GUI
-$XamlFile = "$PSScriptRoot\Xaml\Main.xaml"
+$XamlFile = Join-Path $RootPath "Xaml\Main.xaml"
+if (-not (Test-Path $XamlFile)) {
+    Write-Error "Main XAML layout missing at: $XamlFile"
+    exit 1
+}
+
 [xml]$XamlDoc = Get-Content -Path $XamlFile -Raw
 
 # Parse WPF XAML Reader

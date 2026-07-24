@@ -4,8 +4,13 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [object]$ManifestObj
+    [object]$ManifestObj,
+    [string]$RootPath
 )
+
+if ([string]::IsNullOrWhiteSpace($RootPath)) {
+    $RootPath = if ($PSScriptRoot) { $PSScriptRoot } else { "$env:TEMP\ICT_PDSI_Utility" }
+}
 
 Write-Host "[*] Bootstrapping ICT PDSI Utility environment..." -ForegroundColor Cyan
 
@@ -19,16 +24,16 @@ if ($PSVersionTable.PSVersion.Major -lt 5) {
 }
 
 # Initialize Logger Module
-$LoggerModule = "$PSScriptRoot\Modules\Logger.psm1"
+$LoggerModule = Join-Path $RootPath "Modules\Logger.psm1"
 if (Test-Path -Path $LoggerModule) {
     Import-Module $LoggerModule -Force
     Write-PDSIlog -Action "Bootstrap" -Result "PowerShell & WPF Assemblies Loaded" -Status "SUCCESS"
 }
 
 # Launch Main GUI Engine
-$MainScript = "$PSScriptRoot\Main.ps1"
+$MainScript = Join-Path $RootPath "Main.ps1"
 if (Test-Path -Path $MainScript) {
-    & $MainScript -Manifest $ManifestObj
+    & $MainScript -Manifest $ManifestObj -RootPath $RootPath
 } else {
     Write-Error "Main GUI script not found: $MainScript"
 }
