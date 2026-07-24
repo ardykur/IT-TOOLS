@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "lastUpdated": "2026-07-23",
-  "repository": "https://github.com/pdsi-ict/ict-pdsi-utility",
+  "repository": "https://github.com/ardykur/IT-TOOLS",
   "installerRootSSD": "D:\\ICT_Tools\\Installers",
   "logFilePath": "C:\\ProgramData\\ICT_PDSI_Utility\\Logs\\activity.log",
   "applications": [
