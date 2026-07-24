@@ -1,6 +1,0 @@
-{
-  "name": "ICT PDSI Utility",
-  "description": "ICT PDSI Utility for Windows 10/11 - Software Deployment, Windows Maintenance Tools, System Tweaks, Diagnostics & PowerShell Suite",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

@@ -1,0 +1,140 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-07-23",
+  "repository": "https://github.com/pdsi-ict/ict-pdsi-utility",
+  "installerRootSSD": "D:\\ICT_Tools\\Installers",
+  "logFilePath": "C:\\ProgramData\\ICT_PDSI_Utility\\Logs\\activity.log",
+  "applications": [
+    {
+      "id": "office2019",
+      "name": "Microsoft Office 2019 ProPlus",
+      "category": "Productivity",
+      "silentArgs": "/configure configuration.xml",
+      "estimatedMB": 3200,
+      "mandatory": true,
+      "installerFileName": "Setup_Office2019_x64.exe"
+    },
+    {
+      "id": "m365",
+      "name": "Microsoft 365 Apps for Enterprise",
+      "category": "Productivity",
+      "silentArgs": "setup.exe /configure M365_Config.xml",
+      "estimatedMB": 3500,
+      "mandatory": false,
+      "installerFileName": "OfficeSetup_M365_x64.exe"
+    },
+    {
+      "id": "adobereader",
+      "name": "Adobe Acrobat Reader DC",
+      "category": "PDF & Docs",
+      "silentArgs": "/sAll /rs /msi EULA_ACCEPT=YES",
+      "estimatedMB": 350,
+      "mandatory": true,
+      "installerFileName": "AcroRdrDC_x64.exe"
+    },
+    {
+      "id": "chrome",
+      "name": "Google Chrome Enterprise",
+      "category": "Browser",
+      "silentArgs": "/silent /install",
+      "estimatedMB": 120,
+      "mandatory": true,
+      "installerFileName": "GoogleChromeStandaloneEnterprise64.msi"
+    },
+    {
+      "id": "firefox",
+      "name": "Mozilla Firefox Extended Support",
+      "category": "Browser",
+      "silentArgs": "-ms",
+      "estimatedMB": 110,
+      "mandatory": false,
+      "installerFileName": "Firefox_Setup_ESR_x64.exe"
+    },
+    {
+      "id": "7zip",
+      "name": "7-Zip 24.08 x64",
+      "category": "Utility",
+      "silentArgs": "/S",
+      "estimatedMB": 5,
+      "mandatory": true,
+      "installerFileName": "7z2408-x64.exe"
+    },
+    {
+      "id": "pdf24",
+      "name": "PDF24 Creator",
+      "category": "PDF & Docs",
+      "silentArgs": "/SILENT /NORESTART",
+      "estimatedMB": 140,
+      "mandatory": false,
+      "installerFileName": "pdf24-creator-11.15.2-x64.exe"
+    },
+    {
+      "id": "pdfsam",
+      "name": "PDFSAM Basic",
+      "category": "PDF & Docs",
+      "silentArgs": "/quiet /norestart",
+      "estimatedMB": 85,
+      "mandatory": false,
+      "installerFileName": "pdfsam-v5.2.3-x64.msi"
+    },
+    {
+      "id": "revpdf",
+      "name": "RevPDF Reader & Converter",
+      "category": "PDF & Docs",
+      "silentArgs": "/verysilent /norestart",
+      "estimatedMB": 45,
+      "mandatory": false,
+      "installerFileName": "RevPDF_Setup.exe"
+    },
+    {
+      "id": "sapgui",
+      "name": "SAP GUI for Windows 8.00",
+      "category": "Enterprise",
+      "silentArgs": "/Silent /Package=\"PDSI_Standard\"",
+      "estimatedMB": 1200,
+      "mandatory": true,
+      "installerFileName": "SAPGUI_800_PL2.exe"
+    },
+    {
+      "id": "arubavpn",
+      "name": "Aruba VIA VPN Client",
+      "category": "Network",
+      "silentArgs": "/qn /norestart",
+      "estimatedMB": 65,
+      "mandatory": true,
+      "installerFileName": "ArubaViaSetup-x64.msi"
+    },
+    {
+      "id": "teams",
+      "name": "Microsoft Teams (Work or School)",
+      "category": "Communication",
+      "silentArgs": "-msi /qn",
+      "estimatedMB": 180,
+      "mandatory": true,
+      "installerFileName": "MSTeamsSetup_x64.exe"
+    },
+    {
+      "id": "anydesk",
+      "name": "AnyDesk Remote Control",
+      "category": "Remote",
+      "silentArgs": "--install \"C:\\Program Files (x86)\\AnyDesk\" --start-with-win --silent",
+      "estimatedMB": 12,
+      "mandatory": false,
+      "installerFileName": "AnyDesk.exe"
+    },
+    {
+      "id": "cortexxdr",
+      "name": "Cortex XDR Agent (Palo Alto)",
+      "category": "Security",
+      "silentArgs": "/qn /norestart",
+      "estimatedMB": 210,
+      "mandatory": true,
+      "installerFileName": "CortexXDR_PDSI_x64.msi"
+    }
+  ],
+  "networkDomain": {
+    "targetDomain": "PDSI.CORP.LOCAL",
+    "preferredDNS": "10.10.1.10",
+    "alternateDNS": "10.10.1.11"
+  }
+}
