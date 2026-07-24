@@ -22,10 +22,11 @@ Write-Host "  ICT PDSI Utility v1.0.0 - Launcher" -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # Resolve Base Directory (Handles 'iwr | iex' in-memory execution)
+$IsPipeline = [string]::IsNullOrWhiteSpace($PSScriptRoot)
 if ([string]::IsNullOrWhiteSpace($RootPath)) {
-    if ([string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+    if ($IsPipeline) {
         $RootPath = "$env:TEMP\ICT_PDSI_Utility"
-        Write-Host "[*] In-memory pipeline execution detected. Using work directory: $RootPath" -ForegroundColor Yellow
+        Write-Host "[*] In-memory pipeline execution detected. Work directory: $RootPath" -ForegroundColor Yellow
     } else {
         $RootPath = $PSScriptRoot
     }
@@ -35,10 +36,9 @@ if ([string]::IsNullOrWhiteSpace($ManifestPath)) {
     $ManifestPath = Join-Path $RootPath "Config\Manifest.json"
 }
 
-# Auto-Download Repository Zip if Config/Manifest.json is missing locally
-if (-not (Test-Path -Path $ManifestPath)) {
-    Write-Host "[!] Manifest file missing at: $ManifestPath" -ForegroundColor Yellow
-    Write-Host "[*] Auto-downloading full IT-TOOLS repository from GitHub..." -ForegroundColor Cyan
+# Auto-Download or Sync Repository Zip if running via in-memory pipeline or missing Manifest
+if (-not (Test-Path -Path $ManifestPath) -or $IsPipeline) {
+    Write-Host "[*] Synchronizing latest IT-TOOLS repository from GitHub..." -ForegroundColor Cyan
 
     $ZipUrl = "https://github.com/ardykur/IT-TOOLS/archive/refs/heads/main.zip"
     $ZipFile = Join-Path $env:TEMP "IT-TOOLS-main.zip"
@@ -48,7 +48,7 @@ if (-not (Test-Path -Path $ManifestPath)) {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-WebRequest -Uri $ZipUrl -OutFile $ZipFile -UseBasicParsing
         
-        if (Test-Path $ExtractDir) { Remove-Item $ExtractDir -Recurse -Force }
+        if (Test-Path $ExtractDir) { Remove-Item $ExtractDir -Recurse -Force -ErrorAction SilentlyContinue }
         Expand-Archive -Path $ZipFile -DestinationPath $ExtractDir -Force
 
         if (-not (Test-Path $RootPath)) { New-Item -ItemType Directory -Path $RootPath -Force | Out-Null }
@@ -57,10 +57,14 @@ if (-not (Test-Path -Path $ManifestPath)) {
 
         Remove-Item $ZipFile -Force -ErrorAction SilentlyContinue
         Remove-Item $ExtractDir -Recurse -Force -ErrorAction SilentlyContinue
-        Write-Host "[+] Repository successfully downloaded & extracted to: $RootPath" -ForegroundColor Green
+        Write-Host "[+] Repository successfully synced to: $RootPath" -ForegroundColor Green
     } catch {
-        Write-Error "Failed to download repository files from $ZipUrl : $_"
-        exit 1
+        if (-not (Test-Path -Path $ManifestPath)) {
+            Write-Error "Failed to download repository files from $ZipUrl : $_"
+            exit 1
+        } else {
+            Write-Warning "Could not connect to GitHub, executing cached local source at: $RootPath"
+        }
     }
 }
 
